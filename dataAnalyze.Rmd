@@ -1,0 +1,32 @@
+---
+title: "recommand"
+output: html_document
+---
+#load data
+```{r}
+load.data<-function(dataname){
+  if(dataname == "user"){
+    data.url = "https://storage.googleapis.com/kaggle-competitions-data/kaggle/2799/kaggle_songs.txt?GoogleAccessId=web-data@kaggle-161607.iam.gserviceaccount.com&Expires=1523403965&Signature=kOJWUWDXixFmhcRroGr9CNzdVci%2B7NAoCXcQEEJBFVgxqEwjY9hU6jl7iR1fMAUZQOsU%2B35XthMm4cBPU%2FGa0x7IM9ZgbqjwB1svwoRJ8nsyDnanIpRJZUvcviKajl0KIWlknnXE8M0H0DwOxgdQ8Up5MEG9icuDMb3A3OYjNpe8IqufTUfJTVDoL%2BFq0jqbQ%2BsBy%2Bkq25uP3hR3fNVeIk8BLC9mMZS7NAM7%2FoEVOKG0MTHdFOdvuR5XPcJhShDXG%2FiP1691I9ZtPbG0hcEnUpmj9Fi40Z4nLqkcNELqxvQNMJbVfDIZJEIa6Pl4IkIr6s%2FoGVvT6EvkDTOvya1mA%3D%3D"
+    dataset = read.csv(data.url)
+  }
+  else if(dataname == "history"){
+    data.url = "kaggle_visible_evaluation_triplets.txt"
+    dataset = read.csv(data.url, sep = "\t",col.names = c("u_id","song_id","count"))
+  }
+  dataset
+}
+```
+#analy listening history data
+```{r}
+history<-load.data("history")
+```
+
+```{r}
+#user_play = tapply(history$count, history$u_id, FUN=sum)
+#song_dis = tapply(history$count, history$u_id, FUN=sum)
+user_play = aggregate(count ~ u_id, history, sum)
+df2 <- count(df = user_play, vars = user_play$count, wt_var = user_play$u_id)
+sond_distribution = aggregate(u_id ~ count, user_play, count)
+#history[,list(Frequency=sum(count)),by=u_id]
+```
+
