@@ -21,16 +21,32 @@ load.data<-function(dataname){
 history<-load.data("history")
 history[1:3,]
 ```
-
+ToDo：average count by user
 ```{r}
 history[1:3,]
 #user_play = tapply(history$count, history$u_id, FUN=sum)
 #song_dis = tapply(history$count, history$u_id, FUN=sum)
-user_play = aggregate(count ~ u_id, history, sum)
-df2 <- count(df = user_play, vars = user_play$count, wt_var = user_play$u_id)
-sond_distribution = aggregate(u_id ~ count, user_play, count)
+
+#统计user听的次数, user ~ sum(count)
+userPlay = aggregate(count ~ u_id, history, sum)
+userPlay[1:3,]
+#统计user的数量groupby sum(count)
+#df2 <- count(df = user_play, vars = user_play$count, wt_var = user_play$u_id)
+userCount = as.data.frame(table(userPlay$count))
+userCount[1:3,]
+#sond_distribution = aggregate(u_id ~ count, user_play, count)
 #history[,list(Frequency=sum(count)),by=u_id]
 ```
+```{r}
+library(ggplot2)
+ggplot(userCount, aes(x = Freq)) +
+  geom_histogram(stat = "bin", binwidth = 400)
+```
+normalize data
+```{r}
+data_normalize = scale(userCount[,])
+```
+
 userFreq:
 userID; the number of songs that each user listened
 
@@ -38,7 +54,7 @@ song_userFreq:
 the number of songs that each user listened; the number of users
 ```{r}
 history[1:3,]
-userFreq=as.data.frame(table(history$u_id))
+userFreq = as.data.frame(table(history$u_id))
 userFreq[1:3,]
 summary(userFreq)
 song_userFreq=as.data.frame(table(userFreq$Freq))
@@ -48,5 +64,8 @@ in order to know the distribution of songs listening frequency
 ```{r}
 #song_userFreq
 plot(song_userFreq,xlab="the number of songs listened",ylab="the number of user")
+```
+```{r}
+
 ```
 
