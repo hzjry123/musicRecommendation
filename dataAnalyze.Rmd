@@ -62,10 +62,42 @@ song_userFreq=as.data.frame(table(userFreq$Freq))
 scatter plot
 in order to know the distribution of songs listening frequency
 ```{r}
-#song_userFreq
+song_userFreq
 plot(song_userFreq,xlab="the number of songs listened",ylab="the number of user")
+ggplot(song_userFreq, aes(x = Var1,Freq)) +
+  geom_bar(stat = "identity") +scale_x_discrete(breaks = seq(5,53,by = 5))+labs(title = "The distribution of the number of users on the counts of songs listened
+", x = "the number of songs listened", y = "the number of user")+
+theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+#install.packages("e1071")
+library(e1071)
+read.matrix.csr("mxm_dataset_test.txt")
 ```
 ```{r}
+nrow(history)
+songFreq = as.data.frame(table(history$count))
+plot(songFreq)
+songFreq
+library(ggplot2)
+nrow(songFreq)
+
+
+#ggplot(songFreq[6:70,], aes(x = Var1,Freq)) +
+#  geom_bar(stat = "identity") +scale_x_discrete(breaks = seq(5,53,by = 5))+xlab("the counts of songs listened by one user")+ylab("the #number of user")+opts(title="Plant growth\ndifferent treatment") 
+
+
+
+
+ggplot(songFreq[6:70,], aes(x = Var1,Freq)) +
+  geom_bar(stat = "identity") +scale_x_discrete(breaks = seq(5,53,by = 5))+labs(title = "The counts of one song listened by one user", x = "the counts of songs listened by one user", y = "the number of user")+
+theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+
+summary(history$count)
 
 ```
 
